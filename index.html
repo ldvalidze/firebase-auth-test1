@@ -51,14 +51,18 @@
                     console.log('User created!');
                     user = firebase.auth().currentUser;
                     console.log(user.uid);
+                    firebase.database().ref().set({
+                        username: user.uid,
+                        email: email
+                    });
                 })
             });
             $("#refset").on("click", function (event) {
                 event.preventDefault();
                 console.log('ref set!');
                 firebase.database().ref().set({
-                    username: "name",
-                    email: "email"
+                    username: user.uid,
+                    email: email
                 });
             });
             $("#login").on("click", function (event) {
