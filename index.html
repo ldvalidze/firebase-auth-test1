@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+
+    <meta charset="UTF-8">
+    <title>Firebase Auth Test</title>
+
+    <!-- Firebase JavaScript Link -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase-database.js"></script>
+</head>
+
+<body>
+
+    <!-- JQuery -->
+
+
+    <!-- ================================================================================== -->
+
+    <script>
+        $(document).ready(function () {
+            // Initialize Firebase
+            var config = {
+                apiKey: "AIzaSyBQKVvElJCzBRpp49UB1kXZVfnM_ty9fOU",
+                authDomain: "project-1-97352.firebaseapp.com",
+                databaseURL: "https://project-1-97352.firebaseio.com",
+                projectId: "project-1-97352",
+                storageBucket: "project-1-97352.appspot.com",
+                messagingSenderId: "711415812320"
+            };
+            firebase.initializeApp(config);
+            // Get a reference to the database service
+            var database = firebase.database();
+            $("#signup").on("click", function (event) {
+                event.preventDefault();
+                var email = $("#email").val().trim();
+                var password = $("#pass").val().trim();
+                console.log('trying to create!');
+                firebase.auth().createUserWithEmailAndPassword(email, password).catch(function (error) {
+                    // Handle Errors here.
+                    var errorCode = error.code;
+                    var errorMessage = error.message;
+                    console.log(errorCode);
+                    console.log(errorMessage);
+                });
+            });
+            $("#refset").on("click", function (event) {
+                event.preventDefault();
+                console.log('ref set!');
+                firebase.database().ref().set({
+                    username: "name",
+                    email: "email"
+                });
+            });
+            $("#login").on("click", function (event) {
+                event.preventDefault();
+                var email = $("#email").val().trim();
+                var password = $("#pass").val().trim();
+                console.log('trying to log in!');
+                firebase.auth().signInWithEmailAndPassword(email, password).catch(function (error) {
+                    // Handle Errors here.
+                    var errorCode = error.code;
+                    var errorMessage = error.message;
+                    console.log(errorCode);
+                    console.log(errorMessage);
+                    // ...
+                }).then(function (user) {
+                    var user = firebase.auth().currentUser;
+                });
+            });
+            $("#logout").on("click", function (event) {
+                event.preventDefault();
+                console.log('trying Sign out in!');
+                firebase.auth().signOut().then(function () {
+                    console.log('signed out!');
+                    // Sign-out successful.
+                }).catch(function (error) {
+                    var errorCode = error.code;
+                    var errorMessage = error.message;
+                    console.log(errorCode);
+                    console.log(errorMessage);
+                });
+            });
+            firebase.auth().onAuthStateChanged(function (user) {
+                var user = firebase.auth().currentUser;
+                if (user) {
+                    console.log('signed in! Auth state change detected!');
+                    $('#login').hide();
+                    // User is signed in.
+                } else {
+                    // No user is signed in.
+                    console.log('not signed in. Auth state change detected!');
+                    $('#login').show();
+                }
+            });
+        });
+    </script>
+    <br>
+    <br>
+    <br>
+    <input id="email" placeholder="email" type="email">
+    <input id="pass" placeholder="pass" type="password">
+    <button id="signup" type="submit">Signup</button>
+    <button id="login" type="submit">Log in</button>
+    <button id="logout" type="submit">Log Out</button>
+    <button id="refset" type="submit">Refset</button>
+</body>
+
+</html>
