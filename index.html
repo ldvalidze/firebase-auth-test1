@@ -52,7 +52,7 @@
                     user = firebase.auth().currentUser;
                     console.log(user.uid);
                     firebase.database().ref().set({
-                        username: user.uid,
+                        UID: user.uid,
                         email: email
                     });
                 })
@@ -109,7 +109,7 @@
                     console.log('signed in! Auth state change detected!');
                     console.log(user.uid);
                     $('#login').hide();
-                    
+
                     // User is signed in.
                 } else {
                     // No user is signed in.
@@ -118,12 +118,18 @@
                 }
             });
             $("#term").on("click", function (event) {
-                var term = $(this).text();
-                console.log(term);
-                dataRef.ref().push({
-                    term: term,
-                    dateAdded: firebase.database.ServerValue.TIMESTAMP
-                })
+                if (user) {
+                    var term = $(this).text();
+                    console.log(term);
+                    dataRef.ref("/UID/").push({
+                        term: term,
+                        dateAdded: firebase.database.ServerValue.TIMESTAMP
+                    })
+                } else {
+                    console.log("you need to sign if first!")
+                }
+
+
             })
 
         });
