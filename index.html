@@ -35,6 +35,7 @@
             firebase.initializeApp(config);
             // Get a reference to the database service
             var database = firebase.database();
+            var user;
             $("#signup").on("click", function (event) {
                 event.preventDefault();
                 var email = $("#email").val().trim();
@@ -48,7 +49,7 @@
                     console.log(errorMessage);
                 }).then(function (user) {
                     console.log('User created!');
-                    var user = firebase.auth().currentUser;
+                    user = firebase.auth().currentUser;
                     console.log(user.uid);
                 })
             });
@@ -99,7 +100,7 @@
                 });
             });
             firebase.auth().onAuthStateChanged(function (user) {
-                var user = firebase.auth().currentUser;
+                user = firebase.auth().currentUser;
                 if (user) {
                     console.log('signed in! Auth state change detected!');
                     console.log(user.uid);
