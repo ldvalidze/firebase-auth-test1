@@ -46,7 +46,11 @@
                     var errorMessage = error.message;
                     console.log(errorCode);
                     console.log(errorMessage);
-                });
+                }).then(function (user) {
+                    console.log('User created!');
+                    var user = firebase.auth().currentUser;
+                    console.log(user.uid);
+                })
             });
             $("#refset").on("click", function (event) {
                 event.preventDefault();
@@ -100,6 +104,7 @@
                     console.log('signed in! Auth state change detected!');
                     console.log(user.uid);
                     $('#login').hide();
+                    
                     // User is signed in.
                 } else {
                     // No user is signed in.
@@ -107,7 +112,14 @@
                     $('#login').show();
                 }
             });
-            
+            $("#term").on("click", function (event) {
+                var term = $(this).text();
+                console.log(term);
+                dataRef.ref().push({
+                    term: term,
+                    dateAdded: firebase.database.ServerValue.TIMESTAMP
+                })
+            })
 
         });
     </script>
@@ -120,6 +132,7 @@
     <button id="login" type="submit">Log in</button>
     <button id="logout" type="submit">Log Out</button>
     <button id="refset" type="submit">Refset</button>
+    <button id="term" type="submit">Term</button>
 </body>
 
 </html>
