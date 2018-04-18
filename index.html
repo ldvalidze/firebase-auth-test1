@@ -118,6 +118,7 @@
                 }
             });
             $("#term").on("click", function (event) {
+                var user = firebase.auth().currentUser;
                 if (user) {
                     var term = $(this).text();
                     console.log(term);
