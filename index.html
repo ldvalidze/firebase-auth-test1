@@ -51,7 +51,7 @@
                     console.log('User created!');
                     user = firebase.auth().currentUser;
                     console.log(user.uid);
-                    firebase.database().ref().set({
+                    firebase.database().ref().push({
                         UID: user.uid,
                         email: email
                     });
@@ -60,8 +60,8 @@
             $("#refset").on("click", function (event) {
                 event.preventDefault();
                 console.log('ref set!');
-                firebase.database().ref().set({
-                    username: user.uid,
+                firebase.database().ref().push({
+                    UID: user.uid,
                     email: email
                 });
             });
@@ -122,7 +122,7 @@
                 if (user) {
                     var term = $(this).text();
                     console.log(term);
-                    dataRef.ref("/UID/").push({
+                    firebase.database().ref("/UID/").push({
                         term: term,
                         dateAdded: firebase.database.ServerValue.TIMESTAMP
                     })
