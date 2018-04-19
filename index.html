@@ -24,51 +24,53 @@
     <script>
         $(document).ready(function () {
             // Initialize Firebase
+            // Initialize Firebase
             var config = {
-                apiKey: "AIzaSyBQKVvElJCzBRpp49UB1kXZVfnM_ty9fOU",
-                authDomain: "project-1-97352.firebaseapp.com",
-                databaseURL: "https://project-1-97352.firebaseio.com",
-                projectId: "project-1-97352",
-                storageBucket: "project-1-97352.appspot.com",
-                messagingSenderId: "711415812320"
+                apiKey: "AIzaSyBBOv9ft_Nkv5W9a37QaTRukddSKUsBS84",
+                authDomain: "fir-test-ccdcc.firebaseapp.com",
+                databaseURL: "https://fir-test-ccdcc.firebaseio.com",
+                projectId: "fir-test-ccdcc",
+                storageBucket: "",
+                messagingSenderId: "404543188045"
             };
             firebase.initializeApp(config);
             // Get a reference to the database service
             var database = firebase.database();
             var user;
-            $("#signup").on("click", function (event) {
+            $("#registerBtn").on("click", function (event) {
                 event.preventDefault();
-                var email = $("#email").val().trim();
-                var password = $("#pass").val().trim();
-                console.log('trying to create!');
-                firebase.auth().createUserWithEmailAndPassword(email, password).catch(function (error) {
-                    // Handle Errors here.
-                    var errorCode = error.code;
-                    var errorMessage = error.message;
-                    console.log(errorCode);
-                    console.log(errorMessage);
-                }).then(function (user) {
-                    console.log('User created!');
-                    user = firebase.auth().currentUser;
-                    console.log(user.uid);
-                    firebase.database().ref().push({
-                        UID: user.uid,
-                        email: email
-                    });
-                })
+                var email = $("#uEmailRegister").val().trim();
+                var password = $("#uRegPassword").val().trim();
+                var passwordConfirm = $("#uRegReenterPassword").val().trim();
+                if (password === passwordConfirm) {
+                    console.log('trying to create!');
+                    firebase.auth().createUserWithEmailAndPassword(email, password).catch(function (error) {
+                        // Handle Errors here.
+                        var errorCode = error.code;
+                        var errorMessage = error.message;
+                        console.log(errorCode);
+                        console.log(errorMessage);
+                    }).then(function (user) {
+                        console.log('User created!');
+                        user = firebase.auth().currentUser;
+                        console.log(user.uid);
+                        //?????????????????????????????????????????????????????????????????
+                        firebase.database().ref().push({
+                            UID: user.uid,
+                            email: email
+                        });
+                        //?????????????????????????????????????????????????????????????????
+                    })
+                } else {
+                    console.log("password does not match!");
+                }
+
             });
-            $("#refset").on("click", function (event) {
+
+            $("#signInBtn").on("click", function (event) {
                 event.preventDefault();
-                console.log('ref set!');
-                firebase.database().ref().push({
-                    UID: user.uid,
-                    email: email
-                });
-            });
-            $("#login").on("click", function (event) {
-                event.preventDefault();
-                var email = $("#email").val().trim();
-                var password = $("#pass").val().trim();
+                var email = $("#uEmailLogin").val().trim();
+                var password = $("#uLoginPassword").val().trim();
                 console.log('trying to log in!');
                 firebase.auth().signInWithEmailAndPassword(email, password).catch(function (error) {
                     // Handle Errors here.
@@ -83,14 +85,14 @@
                     if (user) {
                         console.log('signed in! Auth state change detected!');
                         console.log(user);
-                        $('#login').hide();
+                        $('#signInBtn').hide();
                     } else {
                         console.log('not signed in. Auth state change detected!');
-                        $('#login').show();
+                        $('#signInBtn').show();
                     }
                 });
             });
-            $("#logout").on("click", function (event) {
+            $("#logOutBtn").on("click", function (event) {
                 event.preventDefault();
                 console.log('trying Sign out in!');
                 firebase.auth().signOut().then(function () {
@@ -108,25 +110,27 @@
                 if (user) {
                     console.log('signed in! Auth state change detected!');
                     console.log(user.uid);
-                    $('#login').hide();
+                    $('#signInBtn').hide();
 
                     // User is signed in.
                 } else {
                     // No user is signed in.
                     console.log('not signed in. Auth state change detected!');
-                    $('#login').show();
+                    $('#signInBtn').show();
                 }
             });
-            $("#term").on("click", function (event) {
+            $(".term").on("click", function (event) {
                 var user = firebase.auth().currentUser;
                 var UID = user.uid;
                 if (user) {
                     var term = $(this).text();
                     console.log(term);
+                    //?????????????????????????????????????????????????????????????????
                     firebase.database().ref(UID).push({
                         term: term,
                         dateAdded: firebase.database.ServerValue.TIMESTAMP
                     })
+                    //?????????????????????????????????????????????????????????????????
                 } else {
                     console.log("you need to sign if first!")
                 }
@@ -139,9 +143,10 @@
     <br>
     <br>
     <br>
-    <input id="email" placeholder="email" type="email">
-    <input id="pass" placeholder="pass" type="password">
-    <button id="signup" type="submit">Signup</button>
+    <input id="uEmailRegister" placeholder="email" type="email">
+    <input id="uRegPassword" placeholder="pass" type="password">
+    <input id="uRegReenterPassword" placeholder="pass" type="password">
+    <button id="registerBtn" type="submit">Signup</button>
     <button id="login" type="submit">Log in</button>
     <button id="logout" type="submit">Log Out</button>
     <button id="refset" type="submit">Refset</button>
