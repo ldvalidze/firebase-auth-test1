@@ -106,7 +106,7 @@
                 });
             });
             firebase.auth().onAuthStateChanged(function (user) {
-                user = firebase.auth().currentUser;
+                 user = firebase.auth().currentUser;
                 if (user) {
                     console.log('signed in! Auth state change detected!');
                     console.log(user.uid);
@@ -120,8 +120,8 @@
                 }
             });
             $("#term").on("click", function (event) {
-                userUID = firebase.auth().currentUser.uid;
-                
+                var user = firebase.auth().currentUser;
+                userUID = user.uid;
                 if (user) {
                     var term = $(this).text();
                     console.log(term);
