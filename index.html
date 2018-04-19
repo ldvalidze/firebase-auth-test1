@@ -36,7 +36,7 @@
             firebase.initializeApp(config);
             // Get a reference to the database service
             var database = firebase.database();
-            var user;
+            var userUID;
             $("#registerBtn").on("click", function (event) {
                 event.preventDefault();
                 var email = $("#uEmailRegister").val().trim();
@@ -52,10 +52,13 @@
                         console.log(errorMessage);
                     }).then(function (user) {
                         console.log('User created!');
-                        user = firebase.auth().currentUser;
-                        console.log(user.uid);
+                        userUID = firebase.auth().currentUser.uid;
+                        console.log(userUID);
                         //?????????????????????????????????????????????????????????????????
-                        firebase.database().ref(user.uid).push();
+                        firebase.database().ref('/Users/' + userUID).set({
+                            email: email,
+                        });
+                        
                         //?????????????????????????????????????????????????????????????????
                     })
                 } else {
@@ -66,8 +69,8 @@
 
             $("#signInBtn").on("click", function (event) {
                 event.preventDefault();
-                var email = $("#uEmailLogin").val().trim();
-                var password = $("#uLoginPassword").val().trim();
+                var email = $("#uEmailRegister").val().trim();
+                var password = $("#uRegPassword").val().trim();
                 console.log('trying to log in!');
                 firebase.auth().signInWithEmailAndPassword(email, password).catch(function (error) {
                     // Handle Errors here.
@@ -144,8 +147,8 @@
     <input id="uRegPassword" placeholder="pass" type="password">
     <input id="uRegReenterPassword" placeholder="pass" type="password">
     <button id="registerBtn" type="submit">Signup</button>
-    <button id="login" type="submit">Log in</button>
-    <button id="logout" type="submit">Log Out</button>
+    <button id="signInBtn" type="submit">Log in</button>
+    <button id="logOutBtn" type="submit">Log Out</button>
     <button id="refset" type="submit">Refset</button>
     <button id="term" type="submit">Term</button>
 </body>
