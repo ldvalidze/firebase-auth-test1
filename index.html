@@ -119,10 +119,11 @@
             });
             $("#term").on("click", function (event) {
                 var user = firebase.auth().currentUser;
+                var UID = user.uid;
                 if (user) {
                     var term = $(this).text();
                     console.log(term);
-                    firebase.database().ref("/UID/").push({
+                    firebase.database().ref(UID).push({
                         term: term,
                         dateAdded: firebase.database.ServerValue.TIMESTAMP
                     })
